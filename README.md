@@ -12,6 +12,8 @@ ThingsToDo
   * [ ] Exchange peers
   * [ ] Local Discovery
 * __chain__
+  * __consensus__
+    * [ ] Block confirmation
   * __mining__
     * [ ] Block rewards
     * [ ] Dynamic difficulty
