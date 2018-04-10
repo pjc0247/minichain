@@ -33,12 +33,12 @@ namespace minichain
             miningThread.Join();
         }
 
-        private Transaction[] PrepareBlockTransactions()
+        private Transaction[] PrepareBlockTransactions(int blockNo)
         {
             var txs = new List<Transaction>();
 
             // First transaction is block reward
-            txs.Add(Transaction.CreateRewardTransaction(wallet.addr));
+            txs.Add(Transaction.CreateRewardTransaction(blockNo, wallet.addr));
             txs.AddRange(txPool.GetTransactionsWithHighestFee(1024));
 
             return txs.ToArray();
@@ -48,7 +48,7 @@ namespace minichain
             while (isAlive)
             {
                 var workingBlockNo = currentBlock.blockNo;
-                var txs = PrepareBlockTransactions();
+                var txs = PrepareBlockTransactions(workingBlockNo + 1);
                 var vblock = new Block(wallet.addr, currentBlock, txs, "");
 
                 PrepareWorkers(vblock, 8);

@@ -35,9 +35,9 @@ namespace minichain
         {
             return new Block("0", null, new Transaction[] { }, "");
         }
-        public static string GetBlockHash(string prevBlockHash, string rootHash, string nonce)
+        public static string GetBlockHash(string prevBlockHash, string merkleRootHash, string nonce)
         {
-            return Hash.Calc(prevBlockHash + rootHash + nonce);
+            return Hash.Calc(prevBlockHash + merkleRootHash + nonce);
         }
 
         /// <summary>
@@ -90,13 +90,14 @@ namespace minichain
         public Block()
         {
         }
-        public Block(string _minerAddr, Block prev, Transaction[] txs, string _nonce)
+        public Block(string _minerAddr, Block prev, Transaction[] _txs, string _nonce)
         {
-            var merkleTree = new MerkleTree(txs);
+            var merkleTree = new MerkleTree(_txs);
 
             minerAddr = _minerAddr;
             merkleRootHash = merkleTree.GetRootHash();
             nonce = _nonce;
+            txs = _txs;
 
             // GENESIS-BLOCK
             if (prev == null)

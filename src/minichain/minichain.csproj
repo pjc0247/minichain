@@ -49,10 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chain\Block.cs" />
+    <Compile Include="Chain\Consensus.cs" />
     <Compile Include="Chain\Hash.cs" />
     <Compile Include="Chain\MerkleTree.cs" />
     <Compile Include="Chain\Transaction.cs" />
     <Compile Include="Chain\Wallet.cs" />
+    <Compile Include="Net\Packet\NonPublicPropertiesResolver.cs" />
     <Compile Include="State\EndpointNode.cs" />
     <Compile Include="State\NodeBase.cs" />
     <Compile Include="Net\ExternalAddress.cs" />

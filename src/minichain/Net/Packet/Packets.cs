@@ -10,20 +10,6 @@ using Newtonsoft.Json.Serialization;
 
 namespace minichain
 {
-    public class NonPublicPropertiesResolver : DefaultContractResolver
-    {
-        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
-        {
-            var prop = base.CreateProperty(member, memberSerialization);
-            if (member is PropertyInfo pi)
-            {
-                prop.Readable = (pi.GetMethod != null);
-                prop.Writable = (pi.SetMethod != null);
-            }
-            return prop;
-        }
-    }
-
     public class PacketBase
     {
         private static JsonSerializerSettings SerializeSetting =>
@@ -34,6 +20,9 @@ namespace minichain
                 TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
             };
 
+        /// <summary>
+        /// Deserialize the packet from JSON string.
+        /// </summary>
         public static PacketBase FromJson(string json)
         {
             try
@@ -46,17 +35,27 @@ namespace minichain
             }
         }
 
+        /// <summary>
+        /// Uniq packet id
+        /// This is used to avoid duplicated processing in p2p broadcasting.
+        /// </summary>
         public string pid;
 
         public PacketBase()
         {
             pid = UniqID.Generate();
         }
+
+        /// <summary>
+        /// Serialize the packet to JSON string
+        /// </summary>
+        /// <returns></returns>
         public string ToJson()
         {
             return JsonConvert.SerializeObject(this, SerializeSetting);
         }
     }
+
     public class BroadcastPacket : PacketBase
     {
         public int ttl = 10;
