@@ -9,7 +9,7 @@ Minimal implementation of BlockChain
 ThingsToDo
 ----
 * __p2p__
-  * [ ] Exchange peers
+  * [x]  Exchange peers
   * [ ] Local Discovery
 * __chain__
   * __consensus__
