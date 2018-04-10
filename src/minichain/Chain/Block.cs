@@ -52,7 +52,7 @@ namespace minichain
             if (block.txs.Length == 0) return false;
             // 2. Check the reward transaction. (txs[0])
             if (block.txs[0]._out != Consensus.CalcBlockReward(block.blockNo) ||
-                block.txs[0].receiverAddr == block.minerAddr) return false;
+                block.txs[0].receiverAddr != block.minerAddr) return false;
             // 3. Has valid minerAddress
             if (string.IsNullOrEmpty(block.minerAddr)) return false;
             // 4. Has proper difficulty

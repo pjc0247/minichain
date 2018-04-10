@@ -51,6 +51,7 @@ namespace minichain
                 var txs = PrepareBlockTransactions(workingBlockNo + 1);
                 var vblock = new Block(wallet.addr, currentBlock, txs, "");
 
+                var startTime = DateTime.Now;
                 PrepareWorkers(vblock, 8);
 
                 if (ev.WaitOne())
@@ -61,7 +62,7 @@ namespace minichain
                     currentBlock = new Block(wallet.addr, currentBlock, txs, solution);
                     DiscoverBlock(currentBlock);
                     Console.WriteLine(
-                        $"   * FindBlock#{currentBlock.blockNo} \r\n" +
+                        $"   * FindBlock#{currentBlock.blockNo}, elapsed {(DateTime.Now - startTime).TotalSeconds} sec(s)\r\n" +
                         $"        nonce: {solution} \r\n" +
                         $"        prevBlock: {currentBlock.prevBlockHash}");
                 }
