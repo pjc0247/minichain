@@ -16,7 +16,7 @@ ThingsToDo
     * [ ] Block confirmation
   * __mining__
     * [ ] Block rewards
-    * [ ] Dynamic difficulty
+    * [x] Dynamic difficulty
   * __wallet__
     * [ ] implements overall wallet system.
   * __txpool__
