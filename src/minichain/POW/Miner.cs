@@ -15,6 +15,7 @@ namespace minichain
         private AutoResetEvent ev = new AutoResetEvent(false);
 
         private Thread miningThread;
+        private long hashCounter = 0;
 
         public void Start()
         {
@@ -56,13 +57,17 @@ namespace minichain
 
                 if (ev.WaitOne())
                 {
+                    var elapsed = (DateTime.Now - startTime).TotalSeconds;
+                    Console.WriteLine(
+                        $"   * HASHRATE: {(int)(Interlocked.Read(ref hashCounter) / elapsed)}/s");
+
                     if (currentBlock.blockNo != workingBlockNo)
                         continue;
 
                     currentBlock = new Block(wallet.addr, currentBlock, txs, solution);
                     DiscoverBlock(currentBlock);
                     Console.WriteLine(
-                        $"   * FindBlock#{currentBlock.blockNo}, elapsed {(DateTime.Now - startTime).TotalSeconds} sec(s)\r\n" +
+                        $"   * FindBlock#{currentBlock.blockNo}, elapsed {elapsed} sec(s)\r\n" +
                         $"        nonce: {solution} \r\n" +
                         $"        prevBlock: {currentBlock.prevBlockHash}");
                 }
@@ -76,8 +81,11 @@ namespace minichain
 
         private void PrepareWorkers(Block vblock, int nThread)
         {
-            Console.WriteLine("Preparing job, block#" + vblock.blockNo + " with " + nThread + " thread(s).");
+            Console.WriteLine(
+                "------------------------------------------------------------\r\n" +
+                "Preparing job, block#" + vblock.blockNo + " with " + nThread + " thread(s).");
 
+            Interlocked.Exchange(ref hashCounter, 0);
             for (int i = 0; i < nThread; i++)
             {
                 var t = new Thread(() =>
@@ -94,7 +102,11 @@ namespace minichain
             while(vblock.blockNo == currentBlock.blockNo + 1)
             {
                 var nonce = Solver.FindSolution(vblock, start, limit);
+                // DoubleCheck
+                if (vblock.blockNo != currentBlock.blockNo + 1)
+                    return;
 
+                Interlocked.Add(ref hashCounter, limit);
                 if (Block.IsValidBlockLight(vblock, nonce))
                 {
                     solution = nonce;

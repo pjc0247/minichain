@@ -54,6 +54,7 @@
     <Compile Include="Chain\MerkleTree.cs" />
     <Compile Include="Chain\Transaction.cs" />
     <Compile Include="Chain\Wallet.cs" />
+    <Compile Include="DB\FileDB.cs" />
     <Compile Include="Net\Packet\NonPublicPropertiesResolver.cs" />
     <Compile Include="State\EndpointNode.cs" />
     <Compile Include="State\NodeBase.cs" />
