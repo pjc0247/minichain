@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,16 +11,6 @@ namespace minichain
         static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-
-            var a = new MerkleTree(new Transaction[]
-            {
-                new Transaction(),
-                new Transaction(),
-                new Transaction(),
-                new Transaction(),
-                new Transaction(),
-                new Transaction(),
-            });
 
             var miner = new Miner();
             miner.Start();
