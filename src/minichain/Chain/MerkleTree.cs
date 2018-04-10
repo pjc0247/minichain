@@ -11,7 +11,6 @@ namespace minichain
         private class MerkleNode
         {
             public string hash;
-            public Transaction tx;
 
             public int parent;
             public int left, right;
@@ -47,7 +46,7 @@ namespace minichain
                 }
             }
 
-            tree[0].hash = Hash.Calc(tree[1].hash + tree[2].hash);
+            tree[0].hash = Hash.Calc2(tree[1].hash, tree[2].hash);
 
             /*
             for (int i = 0; i < tree.Length; i++)
@@ -78,7 +77,7 @@ namespace minichain
             node.parent = idx / 2;
             if (IsLeftNode(idx)) tree[node.parent].left = idx;
             else tree[node.parent].right = idx;
-            node.hash = Hash.Calc(tree[node.left].hash + tree[node.right].hash);
+            node.hash = Hash.Calc2(tree[node.left].hash, tree[node.right].hash);
 
             CalcHashUpward(node.parent);
         }

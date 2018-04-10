@@ -16,5 +16,16 @@ namespace minichain
 
             return string.Join("", hash.Select(x => x.ToString("x2")).ToArray());
         }
+
+        /// <summary>
+        /// Calculates a hash with two values
+        /// </summary>
+        public static string Calc2(string a, string b)
+        {
+            if (string.Compare(a, b) >= 0)
+                return Calc(a + b);
+            else
+                return Calc(b + a);
+        }
     }
 }

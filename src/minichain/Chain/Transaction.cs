@@ -21,6 +21,18 @@ namespace minichain
         {
             return true;
         }
+        public static bool IsValidTransactionDeep(Transaction tx, 
+            BlockHeader blockHeader, string[] merkleRoute)
+        {
+            if (IsValidTransaction(tx) == false) return false;
+
+            var accHash = tx.hash;
+            foreach (var hash in merkleRoute)
+                accHash = Hash.Calc2(accHash, hash);
+
+            return accHash == blockHeader.merkleRootHash;
+        }
+
         public static Transaction CreateRewardTransaction(int blockNo, string minerAddr)
         {
             return new Transaction()
