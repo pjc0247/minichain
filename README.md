@@ -1,7 +1,7 @@
 minichain
 ====
 
-Minimal implementation of BlockChain
+Minimal implementation of __BLOCKCHAIN__, written in __CSharp__.
 
 ![a](prev.gif)
 
