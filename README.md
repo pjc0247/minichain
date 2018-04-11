@@ -10,7 +10,8 @@
                                                              pjc0247@naver.com
       
 
-Minimal implementation of __BLOCKCHAIN__, written in __CSharp__.
+Minimal implementation of __BLOCKCHAIN__, written in __CSharp__.<br>
+__[Documentation](docs/)__<br>
 
 ![a](prev.gif)
 
