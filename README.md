@@ -1,5 +1,14 @@
-minichain
-====
+                  _       _      _           _       
+                 (_)     (_)    | |         (_)      
+        _ __ ___  _ _ __  _  ___| |__   __ _ _ _ __  
+       | '_ ` _ \| | '_ \| |/ __| '_ \ / _` | | '_ \ 
+       | | | | | | | | | | | (__| | | | (_| | | | | |
+       |_| |_| |_|_|_| |_|_|\___|_| |_|\__,_|_|_| |_|
+      
+                Minimal implementation of blockchain
+                                   Written in CSharp
+                                   pjc0247@naver.com
+      
 
 Minimal implementation of __BLOCKCHAIN__, written in __CSharp__.
 
