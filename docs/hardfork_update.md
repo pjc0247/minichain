@@ -18,6 +18,7 @@ private static double M2_RewardFunction(int blockNo)
 {
     return (100000 - blockNo) * 0.75;
 }
+
 public static double CalcBlockReward(int blockNo)
 {
     if (blockNo >= M2_Hardfork_BlockNo)
