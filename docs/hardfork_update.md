@@ -17,7 +17,7 @@ private static double M1_RewardFunction(int blockNo)
 }
 private static double M2_RewardFunction(int blockNo)
 {
-    return (100000 - blockNo) * 0.75;
+    return (100000 - blockNo) * 0.75; // x0.75 to reduce block reward
 }
 
 public static double CalcBlockReward(int blockNo)
