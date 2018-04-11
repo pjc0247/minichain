@@ -36,11 +36,15 @@ namespace minichain
 
         private Transaction[] PrepareBlockTransactions(int blockNo)
         {
+            // -1 for reward transaction
+            var txsWithHighestFee = 
+                txPool.GetTransactionsWithHighestFee(Consensus.MaxTransactionsPerBlock - 1);
             var txs = new List<Transaction>();
 
             // First transaction is block reward
-            txs.Add(Transaction.CreateRewardTransaction(blockNo, wallet.address));
-            txs.AddRange(txPool.GetTransactionsWithHighestFee(1024));
+            //    Block reward is BLOCK_REWARD + TOTAL_FEE
+            txs.Add(Transaction.CreateRewardTransaction(blockNo, wallet.address, txsWithHighestFee));
+            txs.AddRange(txsWithHighestFee);
 
             return txs.ToArray();
         }

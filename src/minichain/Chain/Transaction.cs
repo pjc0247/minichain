@@ -52,14 +52,16 @@ namespace minichain
             return accHash == blockHeader.merkleRootHash;
         }
 
-        public static Transaction CreateRewardTransaction(int blockNo, string minerAddr)
+        public static Transaction CreateRewardTransaction(int blockNo, string minerAddr, Transaction[] txs)
         {
+            var totalFee = txs.Sum(x => x.fee);
+
             return new Transaction()
             {
                 senderAddr = Consensus.RewardSenderAddress,
                 receiverAddr = minerAddr,
                 fee = 0,
-                _out = Consensus.CalcBlockReward(blockNo)
+                _out = Consensus.CalcBlockReward(blockNo) + totalFee
             };
         }
 

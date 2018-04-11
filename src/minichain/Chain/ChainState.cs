@@ -51,7 +51,8 @@ namespace minichain
                     if (senderWallet == null)
                         senderWallet = sdb.GetState(currentBlock.prevBlockHash, tx.senderAddr);
 
-                    senderWallet.balance -= tx._out;
+                    // Actual OUT is (_out + fee)
+                    senderWallet.balance -= tx._out - tx.fee;
                     changes.Add(senderWallet);
                 }
 

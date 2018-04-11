@@ -54,10 +54,12 @@ namespace minichain
             // Genesis-block is always right;
             if (block.blockNo == 0) return true;
 
+            var totalFee = block.txs.Sum(x => x.fee);
+
             // 1. txs MUST be non-empty (except genesis-block)
             if (block.txs.Length == 0 || block.txs.Length > Consensus.MaxTransactionsPerBlock) return false;
             // 2. Check the reward transaction. (txs[0])
-            if (block.txs[0]._out != Consensus.CalcBlockReward(block.blockNo) ||
+            if (block.txs[0]._out != Consensus.CalcBlockReward(block.blockNo) + totalFee ||
                 block.txs[0].senderAddr != Consensus.RewardSenderAddress ||
                 block.txs[0].receiverAddr != block.minerAddr) return false;
             // 3. Has valid minerAddress
