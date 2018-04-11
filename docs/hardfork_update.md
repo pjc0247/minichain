@@ -1,6 +1,7 @@
 Hardfork update
 ====
 
+In this section, describes how to write hard-fork update codes in already operating blockchain.<br>
 You need to read [this article](https://github.com/pjc0247/minichain/blob/master/docs/customize_chain.md) first.
 
 
