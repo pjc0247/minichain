@@ -1,6 +1,11 @@
 minichain
 ====
 
+Subjects
+----
+  * [Customize minichain](customize_chain.md)
+  * [Create a hardfork patch](hardfork_update.md)
+
 Setup minable node
 ----
 ```cs
