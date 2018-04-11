@@ -7,6 +7,7 @@ You need to read [this article](https://github.com/pjc0247/minichain/blob/master
 
 Change block reward after Nth block
 ----
+If you think current block reward is too much and want to reduce it in the future, you can write code like below:
 ```cs
 private static readonly int M2_Hardfork_BlockNo = 5000;
 
