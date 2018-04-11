@@ -9,7 +9,7 @@ Minimal implementation of __BLOCKCHAIN__, written in __CSharp__.
 ThingsToDo
 ----
 * __p2p__
-  * [x]  Exchange peers
+  * [x] Exchange peers
   * [ ] Local Discovery
 * __chain__
   * __consensus__
@@ -19,6 +19,7 @@ ThingsToDo
     * [x] Dynamic difficulty
   * __wallet__
     * [ ] implements overall wallet system.
+    * [x] Transaction signing
   * __txpool__
     * [ ] implements overall txpool system.
 * __PoW__
