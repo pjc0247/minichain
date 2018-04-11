@@ -3,6 +3,9 @@ Hardfork update
 
 You need to read [this article](https://github.com/pjc0247/minichain/blob/master/docs/customize_chain.md) first.
 
+
+Change block reward after Nth block
+----
 ```cs
 private static readonly int M2_Hardfork_BlockNo = 5000;
 
@@ -20,5 +23,30 @@ public static double CalcBlockReward(int blockNo)
         return M2_RewardFunction(blockNo);
     else 
         return M1_RewardFunction(blockNo);
+}
+```
+
+Change hash algorhthm after Nth block
+----
+```cs
+private static readonly int M3_Hardfork_BlockNo = 9000;
+
+private static string M1_GetBlockHash(Block block) {
+    return Hash.Sha1(block);
+}
+private static string M3_GetBlockHash(Block block) {
+    return Hash.Sha512(block);
+}
+
+public static bool IsValidBlockLight(Block block, string nonce)
+{
+    string blockHash;
+    
+    if (block.blockNo >= M3_Hardfork_BlockNo)
+       blockHash = M3_GetBlockHash(block);
+    else 
+       blockHash = M1_GetBlockHash(block);
+       
+    return VALIDATE_BLOCK(blockHash);
 }
 ```
