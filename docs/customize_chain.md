@@ -1,6 +1,10 @@
 Customize minichain
 ====
 
+https://github.com/pjc0247/minichain/blob/master/src/minichain/Chain/Consensus.cs
+
+Block rewards
+----
 ```cs
 public static double CalcBlockReward(int blockNo)
 {
@@ -20,6 +24,9 @@ public static double CalcBlockReward(int blockNo)
     return 1;
 }
 ```
+
+Block difficulty
+----
 ```cs
 public static int CalcBlockDifficulty(int blockNo)
 {
