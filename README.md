@@ -15,6 +15,18 @@ __[Documentation](docs/)__<br>
 
 ![a](prev.gif)
 
+You can learn
+----
+  * P2P communication between nodes
+  * How to create(mine) a new block and distribute to chain
+  * Consensus based on `Proof of work`
+  * Store/Retrive data(state) into blockchain
+  * Signing transaction (Using asymmetric key validation)
+
+You can also learn
+  * Create a hardfork update to ongoing blockchain.
+  * Bad node attack 
+
 Sub repositories
 ----
 * [Demonstrate 51% attack on blockchain network](https://github.com/pjc0247/minichain_51attack_demo)
