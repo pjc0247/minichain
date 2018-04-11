@@ -5,6 +5,10 @@ Minimal implementation of __BLOCKCHAIN__, written in __CSharp__.
 
 ![a](prev.gif)
 
+Sub repositories
+----
+* [Demonstrate 51% attack on blockchain network](https://github.com/pjc0247/minichain_51attack_demo)
+* [State DB implementation](https://github.com/pjc0247/minichain_state_db)
 
 ThingsToDo
 ----
