@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
-    public class RpcPacketBase
+    public class RpcPacketBase : PacketBase
     {
     }
 
@@ -18,5 +18,12 @@ namespace minichain
     {
         public string receiverAddr;
         public double amount;
+    }
+    public class RpcQueryBalance : RpcPacketBase
+    {
+    }
+    public class RpcResponse : RpcPacketBase
+    {
+        public object result;
     }
 }

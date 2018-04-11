@@ -59,6 +59,9 @@
     <Compile Include="DB\FileDB.cs" />
     <Compile Include="DB\StateDB.cs" />
     <Compile Include="Net\Packet\NonPublicPropertiesResolver.cs" />
+    <Compile Include="Net\RPC\Packets.cs" />
+    <Compile Include="Net\RPC\RpcServer.cs" />
+    <Compile Include="Net\RPC\RpcSession.cs" />
     <Compile Include="State\EndpointNode.cs" />
     <Compile Include="State\NodeBase.cs" />
     <Compile Include="Net\ExternalAddress.cs" />

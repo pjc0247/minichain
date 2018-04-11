@@ -16,10 +16,14 @@ namespace minichain
         public Wallet wallet { get; private set; }
         public ChainState chain { get; private set; }
 
+        private RpcServer rpcServer;
+
         private Thread discoverThread;
 
         public EndpointNode()
         {
+            rpcServer = new RpcServer(this, 9916);
+
             chain = new ChainState();
             wallet = new Wallet(chain);
 
