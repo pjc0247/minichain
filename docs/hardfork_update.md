@@ -26,7 +26,7 @@ public static double CalcBlockReward(int blockNo)
 }
 ```
 
-Change hash algorhthm after Nth block
+Change hashing algorhthm after Nth block
 ----
 ```cs
 private static readonly int M3_Hardfork_BlockNo = 9000;
