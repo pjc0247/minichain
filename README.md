@@ -39,12 +39,12 @@ ThingsToDo
   * [ ] Local Discovery
 * __chain__
   * __consensus__
-    * [ ] Block confirmation
+    * [x] Block confirmation
   * __mining__
-    * [ ] Block rewards
+    * [x] Block rewards
     * [x] Dynamic difficulty
   * __wallet__
-    * [ ] implements overall wallet system.
+    * [x] implements overall wallet system.
     * [x] Transaction signing
   * __txpool__
     * [ ] implements overall txpool system.
