@@ -43,12 +43,8 @@ namespace minichain
         public static bool IsValidNonce(Block block, string nonce)
         {
             var hash = GetBlockHash(block.prevBlockHash, block.merkleRootHash, nonce);
-            for (int i = 0; i < block.difficulty; i++)
-            {
-                if (hash[i] != '0')
-                    return false;
-            }
-            return true;
+
+            return hash.StartsWith(new string('0', block.difficulty));
         }
         /// <summary>
         /// Lightweight validations with block header.
@@ -70,16 +66,7 @@ namespace minichain
             if (Consensus.CalcBlockDifficulty(block.blockNo) != block.difficulty) return false;
 
             // 5. Check the nonce with block difficulty
-            var hash = GetBlockHash(block.prevBlockHash, block.merkleRootHash, nonce);
-            for (int i = 0; i < block.difficulty; i++)
-            {
-                if (hash[i] != '0')
-                {
-                    Console.WriteLine("INVALDI NON");
-                    return false;
-                }
-            }
-            return true;
+            return IsValidNonce(block, nonce);
         }
         /// <summary>
         /// Fully validate the given block.
