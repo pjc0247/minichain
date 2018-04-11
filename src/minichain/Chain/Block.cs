@@ -26,20 +26,30 @@ namespace minichain
     }
     public class BlockBody : BlockHeader
     {
-        public Transaction[] txs;
+        public Transaction[] txs { get; protected set; }
     }
 
     public class Block : BlockBody
     {
         public static Block GenesisBlock()
         {
-            return new Block("0", null, new Transaction[] { }, "");
+            return new Block(null, null, new Transaction[] { }, "");
         }
         public static string GetBlockHash(string prevBlockHash, string merkleRootHash, string nonce)
         {
             return Hash.Calc(prevBlockHash + merkleRootHash + nonce);
         }
 
+        public static bool IsValidNonce(Block block, string nonce)
+        {
+            var hash = GetBlockHash(block.prevBlockHash, block.merkleRootHash, nonce);
+            for (int i = 0; i < block.difficulty; i++)
+            {
+                if (hash[i] != '0')
+                    return false;
+            }
+            return true;
+        }
         /// <summary>
         /// Lightweight validations with block header.
         /// </summary>
@@ -49,9 +59,10 @@ namespace minichain
             if (block.blockNo == 0) return true;
 
             // 1. txs MUST be non-empty (except genesis-block)
-            if (block.txs.Length == 0) return false;
+            if (block.txs.Length == 0 || block.txs.Length > Consensus.MaxTransactionsPerBlock) return false;
             // 2. Check the reward transaction. (txs[0])
             if (block.txs[0]._out != Consensus.CalcBlockReward(block.blockNo) ||
+                block.txs[0].senderAddr != Consensus.RewardSenderAddress ||
                 block.txs[0].receiverAddr != block.minerAddr) return false;
             // 3. Has valid minerAddress
             if (string.IsNullOrEmpty(block.minerAddr)) return false;
@@ -63,7 +74,10 @@ namespace minichain
             for (int i = 0; i < block.difficulty; i++)
             {
                 if (hash[i] != '0')
+                {
+                    Console.WriteLine("INVALDI NON");
                     return false;
+                }
             }
             return true;
         }
@@ -75,8 +89,9 @@ namespace minichain
             if (IsValidBlockLight(block, nonce) == false)
                 return false;
 
-            // 1. Check every transactions are valid
-            if (block.txs.Any(x => Transaction.IsValidTransaction(x) == false))
+            // 1. Check 1~n transactions are valid
+            //    (txs[0] is a special transaction which is reserved for block reward)
+            if (block.txs.Skip(1).Any(x => Transaction.IsValidTransaction(x) == false))
                 return false;
 
             // 2. Check merkleRootHash is valid

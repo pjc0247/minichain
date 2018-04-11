@@ -12,7 +12,7 @@ namespace minichain
         {
             for (int i=start; i<start + limit; i++)
             {
-                if (Block.IsValidBlockLight(vblock, i.ToString()))
+                if (Block.IsValidNonce(vblock, i.ToString()))
                     return i.ToString();
             }
 

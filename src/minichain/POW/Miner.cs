@@ -39,18 +39,19 @@ namespace minichain
             var txs = new List<Transaction>();
 
             // First transaction is block reward
-            txs.Add(Transaction.CreateRewardTransaction(blockNo, wallet.addr));
+            txs.Add(Transaction.CreateRewardTransaction(blockNo, wallet.address));
             txs.AddRange(txPool.GetTransactionsWithHighestFee(1024));
 
             return txs.ToArray();
         }
+
         private void MinerHQ()
         {
             while (isAlive)
             {
-                var workingBlockNo = currentBlock.blockNo;
+                var workingBlockNo = chain.currentBlock.blockNo;
                 var txs = PrepareBlockTransactions(workingBlockNo + 1);
-                var vblock = new Block(wallet.addr, currentBlock, txs, "");
+                var vblock = new Block(wallet.address, chain.currentBlock, txs, "");
 
                 var startTime = DateTime.Now;
                 PrepareWorkers(vblock, 8);
@@ -61,15 +62,20 @@ namespace minichain
                     Console.WriteLine(
                         $"   * HASHRATE: {(int)(Interlocked.Read(ref hashCounter) / elapsed)}/s");
 
-                    if (currentBlock.blockNo != workingBlockNo)
+                    if (chain.currentBlock.blockNo != workingBlockNo)
+                    {
+                        txPool.AddTransactions(txs.Skip(1).ToArray());
                         continue;
+                    }
 
-                    currentBlock = new Block(wallet.addr, currentBlock, txs, solution);
-                    DiscoverBlock(currentBlock);
+                    chain.PushBlock(new Block(wallet.address, chain.currentBlock, txs, solution));
+
+                    DiscoverBlock(chain.currentBlock);
                     Console.WriteLine(
-                        $"   * FindBlock#{currentBlock.blockNo}, elapsed {elapsed} sec(s)\r\n" +
+                        $"   * FindBlock#{chain.currentBlock.blockNo}, elapsed {elapsed} sec(s)\r\n" +
                         $"        nonce: {solution} \r\n" +
-                        $"        prevBlock: {currentBlock.prevBlockHash}");
+                        $"        prevBlock: {chain.currentBlock.prevBlockHash} \r\n" + 
+                        $"        txs: {chain.currentBlock.txs.Length}");
                 }
             }
         }
@@ -99,15 +105,15 @@ namespace minichain
         {
             var limit = 10000;
 
-            while(vblock.blockNo == currentBlock.blockNo + 1)
+            while(vblock.blockNo == chain.currentBlock.blockNo + 1)
             {
                 var nonce = Solver.FindSolution(vblock, start, limit);
                 // DoubleCheck
-                if (vblock.blockNo != currentBlock.blockNo + 1)
+                if (vblock.blockNo != chain.currentBlock.blockNo + 1)
                     return;
 
                 Interlocked.Add(ref hashCounter, limit);
-                if (Block.IsValidBlockLight(vblock, nonce))
+                if (Block.IsValidNonce(vblock, nonce))
                 {
                     solution = nonce;
                     ev.Set();

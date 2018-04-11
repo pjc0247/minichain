@@ -9,33 +9,18 @@ using System.Threading.Tasks;
 namespace minichain
 {
     class Program
-    {
-        private static readonly string Logo = @"
-                  _       _      _           _       
-                 (_)     (_)    | |         (_)      
-        _ __ ___  _ _ __  _  ___| |__   __ _ _ _ __  
-       | '_ ` _ \| | '_ \| |/ __| '_ \ / _` | | '_ \ 
-       | | | | | | | | | | | (__| | | | (_| | | | | |
-       |_| |_| |_|_|_| |_|_|\___|_| |_|\__,_|_|_| |_|
-      
-                Minimal implementation of blockchain
-                                   Written in CSharp
-                                   pjc0247@naver.com
-      
-";
-
+    { 
         static void Main(string[] args)
         {
             Console.CursorVisible = false;
             Console.Title = "minichain";
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(Logo);
-            Console.WriteLine();
-            Console.ResetColor();
+            Copyright.PrintLogo();
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             var miner = new Miner();
+            Console.WriteLine("==============THIS IS A YOUR WALLET DATA==============");
+            Console.WriteLine(miner.wallet.Export());
             miner.Start();
 
             try
@@ -46,7 +31,10 @@ namespace minichain
                 {
                     var addr = Console.ReadLine();
 
-                    peers.AddPeer(addr);
+                    if (addr == "P")
+                        miner.SendTransaction(miner.wallet.CreateSignedTransaction("ASDF", 0.1));
+                    else
+                        peers.AddPeer(addr);
                 }
             }
             catch (Exception e)

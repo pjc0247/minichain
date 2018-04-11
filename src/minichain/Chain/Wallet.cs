@@ -4,20 +4,97 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 namespace minichain
 {
-    public class Wallet
+    public class WalletState
     {
-        public string addr;
+        public string address;
 
-        public Wallet()
+        public double balance;
+    }
+    public class WalletParameter
+    {
+        public string address;
+        public string publicKey;
+        public string privateKey;
+    }
+
+    public class Wallet : WalletState
+    {
+        private string publicKey;
+        private string privateKey;
+
+        private ChainState chain;
+
+        public Wallet(ChainState _chain)
         {
-            addr = Hash.Calc(Guid.NewGuid().ToString());
+            RSA.GenerateKeyPair(out publicKey, out privateKey);
+
+            chain = _chain;
+            address = Hash.Calc(publicKey);
         }
 
-        public Transaction CreateTransaction(string receiver, double amount)
+        /// <summary>
+        /// Import wallet from json string
+        /// </summary>
+        public void Import(string json)
         {
-            return new Transaction();
+            var p = JsonConvert.DeserializeObject<WalletParameter>(json);
+
+            address = p.address;
+            privateKey = p.privateKey;
+            publicKey = p.publicKey;
+        }
+        /// <summary>
+        /// Export current wallet to json string
+        /// </summary>
+        public string Export()
+        {
+            var p = new WalletParameter()
+            {
+                address = address,
+                privateKey = privateKey,
+                publicKey = publicKey
+            };
+
+            return JsonConvert.SerializeObject(p, Formatting.Indented);
+        }
+
+        public double GetBalanceInBlock(string blockHash)
+        {
+            return chain.GetBalanceInBlock(address, blockHash);
+        }
+        public double GetBalance()
+        {
+            return chain.GetBalance(address);
+        }
+
+        /// <summary>
+        /// Create a transaction signed by this wallet
+        /// </summary>
+        public Transaction CreateSignedTransaction(string receiverAddr, double amount, double fee = 0)
+        {
+            var tx = new Transaction()
+            {
+                _in = chain.GetBalance(address),
+                _out = amount,
+
+                senderAddr = address,
+                receiverAddr = receiverAddr,
+
+                fee = fee
+            };
+            Sign(tx);
+            return tx;
+        }
+        /// <summary>
+        /// Sign a single transaction
+        /// </summary>
+        public void Sign(Transaction tx)
+        {
+            tx.Sign(privateKey, publicKey);
         }
     }
 }

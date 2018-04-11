@@ -42,8 +42,6 @@ namespace minichain
             if (peers.Count >= MaxPeers) return;
             if (peers.Any(x => x.Key.address == addr)) return;
 
-            Console.WriteLine(addr);
-
             if (addr.StartsWith("ws://") == false &&
                 addr.StartsWith("wss://") == false)
                 addr = "ws://" + addr;

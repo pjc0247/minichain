@@ -13,14 +13,16 @@ namespace minichain
 
         protected NewBlockDiscoveredDelegate onNewBlockDiscovered;
 
-        // Every node starts with genesisBlock.
-        //   This will be overwritten if there is any other live nodes.
-        protected Block currentBlock = Block.GenesisBlock();
+        public Wallet wallet { get; private set; }
+        public ChainState chain { get; private set; }
 
         private Thread discoverThread;
 
         public EndpointNode()
         {
+            chain = new ChainState();
+            wallet = new Wallet(chain);
+
             Subscribe<PktBroadcastNewBlock>(OnNewBlock);
             Subscribe<PktNewTransaction>(OnNewTransaction);
             Subscribe<PktRequestPeers>(OnRequestPeers);
@@ -34,6 +36,19 @@ namespace minichain
             base.Stop();
 
             discoverThread.Join();
+        }
+
+        public void SendTransaction(Transaction tx)
+        {
+            if (Transaction.IsValidTransaction(tx) == false)
+                throw new ArgumentException(nameof(tx));
+
+            txPool.AddTransaction(tx);
+            SendPacketToAllPeers(new PktNewTransaction()
+            {
+                sentBlockNo = chain.currentBlock.blockNo,
+                tx = tx
+            });
         }
 
         private void DiscoverWorker()
@@ -74,11 +89,11 @@ namespace minichain
         protected virtual void OnNewBlock(Peer sender, PktBroadcastNewBlock pkt)
         {
             // Peer sent invalid block.
-            if (Block.IsValidBlockLight(pkt.block, pkt.block.nonce) == false) return;
+            if (Block.IsValidBlockLight(pkt.block, pkt.block.nonce) == false)  { Console.WriteLine("Invalid block"); return; }
             // My block is longer than received
-            if (currentBlock.blockNo >= pkt.block.blockNo) return;
+            if (chain.currentBlock.blockNo >= pkt.block.blockNo) return;
 
-            currentBlock = pkt.block;
+            chain.PushBlock(pkt.block);
             onNewBlockDiscovered?.Invoke(pkt.block);
         }
         protected virtual void OnNewTransaction(Peer sender, PktNewTransaction pkt)
@@ -86,8 +101,9 @@ namespace minichain
             // Peer sent invalid transaction
             if (pkt.tx == null) return;
             // Future transaction which cannot be processed at this time
-            if (currentBlock.blockNo < pkt.sentBlockNo) return;
-            if (currentBlock.blockNo >= pkt.sentBlockNo + 10) return;
+            if (chain.currentBlock.blockNo < pkt.sentBlockNo) return;
+            if (chain.currentBlock.blockNo >= pkt.sentBlockNo + 10) return;
+            if (Transaction.IsValidTransaction(pkt.tx) == false) return;
 
             txPool.AddTransaction(pkt.tx);
         }

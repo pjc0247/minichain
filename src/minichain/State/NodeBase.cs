@@ -11,8 +11,8 @@ namespace minichain
         public bool isAlive { get; protected set; }
 
         public PeerPool peers { get; private set; }
-        public Wallet wallet { get; private set; }
-        protected TransactionPool txPool = new TransactionPool();
+
+        protected TransactionPool txPool { get; private set; }
 
         private Dictionary<Type, Action<Peer, object>> subscribers = new Dictionary<Type, Action<Peer, object>>();
         private HashSet<string> processedPackets = new HashSet<string>();
@@ -20,7 +20,7 @@ namespace minichain
         public NodeBase()
         {
             peers = new PeerPool(this);
-            wallet = new Wallet();
+            txPool = new TransactionPool();
         }
 
         public virtual void Stop()

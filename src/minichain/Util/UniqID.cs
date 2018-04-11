@@ -10,7 +10,7 @@ namespace minichain
     {
         public static string Generate()
         {
-            return Guid.NewGuid().ToString();
+            return Hash.Calc(Guid.NewGuid().ToString());
         }
     }
 }
