@@ -9,6 +9,13 @@ var node = new Miner();
 node.Start();
 ```
 
+P2p
+----
+__Connect to peer__
+```cs
+node.peers.AddPeer("ws://localhost:9916");
+```
+
 Chain
 ----
 __Current block (last confirmed block)__
