@@ -23,7 +23,7 @@ You can learn
   * Store/Retrive data(state) into blockchain
   * Signing transaction (Using asymmetric key validation)
 
-You can also learn
+__You can also learn__
   * Create a hardfork update to ongoing blockchain.
   * Bad node attack 
 
