@@ -9,8 +9,12 @@ namespace minichain
 {
     class Hash
     {
+        /// <summary>
+        /// Calculates a hash with one value
+        /// </summary>
         public static string Calc(string a)
         {
+            // I know it is not a good hashing algorithm.
             var sha = SHA1.Create();
             var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(a));
 

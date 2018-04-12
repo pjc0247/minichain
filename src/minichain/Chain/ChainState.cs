@@ -34,6 +34,10 @@ namespace minichain
 
         internal void PushBlock(Block block)
         {
+            // In case that new block is came from another branch:
+            if (block.prevBlockHash != currentBlock.hash)
+                ;
+
             currentBlock = block;
             fdb.Write($"block/{block.hash}", block);
 

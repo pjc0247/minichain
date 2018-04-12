@@ -13,7 +13,7 @@ namespace bad_node_demo
     /// A simple packet that allows
     /// attackers to know each other.
     /// </summary>
-    class PktHelloBadNode : PacketBase
+    class PktHelloBadNode : BroadcastPacket
     {
         public string addr;
     }
@@ -51,7 +51,7 @@ namespace bad_node_demo
         private void OnHelloBadNode(Peer sender, PktHelloBadNode pkt)
         {
             if (badNodeAddrs.Add(pkt.addr))
-                Console.WriteLine("Discovered Another Bad Node!!  " + sender.address);
+                Console.WriteLine("Discovered another bad node!!  " + sender.address);
         }
 
         protected override void OnNewBlock(Peer sender, PktBroadcastNewBlock pkt)
