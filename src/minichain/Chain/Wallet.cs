@@ -10,9 +10,8 @@ namespace minichain
 {
     public class WalletState
     {
-        public string address;
-
-        public double balance;
+        public string address { get; protected set; }
+        public double balance { get; protected set; }
     }
     public class WalletParameter
     {

@@ -8,12 +8,16 @@ namespace minichain
 {
     public class TransactionHeader
     {
+        /// Random generated hash
         public string hash;
+        /// To give a chance user can modify the transaction
+        ///    already distributed but not in chain.
         public int version;
 
+        /// This will be used to validate the `sign`.
         public string publicKey;
         /// RSA encrypted sign to validate this transaction.
-        public string sign;
+        public string encryptedSign;
 
         public string senderAddr, receiverAddr;
 
@@ -21,12 +25,12 @@ namespace minichain
         public double _in, _out;
 
         public bool isSigned =>
-            !string.IsNullOrEmpty(publicKey) && !string.IsNullOrEmpty(sign);
+            !string.IsNullOrEmpty(publicKey) && !string.IsNullOrEmpty(encryptedSign);
     }
 
     public class Transaction : TransactionHeader
     {
-        public static Transaction EmptyTransaction()
+        internal static Transaction EmptyTransaction()
         {
             return new Transaction() { hash = "0000000000000000" };
         }
@@ -37,11 +41,14 @@ namespace minichain
 
             if (Hash.Calc(tx.publicKey) != tx.senderAddr)
                 return false;
-            if (RSA.VerifyWithPrivateKey(tx.publicKey, tx.GetTransactionSigniture(), tx.sign) == false)
+            if (RSA.VerifyWithPrivateKey(tx.publicKey, tx.GetTransactionSigniture(), tx.encryptedSign) == false)
                 return false;
 
             return true;
         }
+        /// <summary>
+        /// Validates the transaction is actually included in the block.
+        /// </summary>
         public static bool IsValidTransactionDeep(Transaction tx, 
             BlockHeader blockHeader, string[] merkleRoute)
         {
@@ -84,6 +91,7 @@ namespace minichain
 
         /// <summary>
         /// Sign this transaction, 
+        /// Only signed transaction can be accepted in chain.
         /// 
         /// This makes attacker cannot create fake/manipulated transaction.
         /// 
@@ -94,7 +102,7 @@ namespace minichain
         {
             var original = GetTransactionSigniture();
 
-            sign = RSA.SignWithPrivateKey(_privateKey, original);
+            encryptedSign = RSA.SignWithPrivateKey(_privateKey, original);
             publicKey = _publicKey;
         }
     }
