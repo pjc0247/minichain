@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
+    /// <summary>
+    /// Base class which provides basic Send/Recv methods.
+    /// </summary>
     public class NodeBase
     {
         public bool isAlive { get; protected set; }
 
         public PeerPool peers { get; private set; }
-
-        protected TransactionPool txPool { get; private set; }
 
         private Dictionary<Type, Action<Peer, object>> subscribers = new Dictionary<Type, Action<Peer, object>>();
         private HashSet<string> processedPackets = new HashSet<string>();
@@ -20,7 +21,6 @@ namespace minichain
         public NodeBase()
         {
             peers = new PeerPool(this);
-            txPool = new TransactionPool();
         }
 
         public virtual void Stop()
@@ -37,7 +37,9 @@ namespace minichain
         }
         public void ProcessPacket(Peer sender, PacketBase packet)
         {
-            if (string.IsNullOrEmpty(packet.pid)) return;
+            if (packet == null || string.IsNullOrEmpty(packet.pid)) return;
+            // Since we're currently using p2p networking,
+            //   same packet can be delivered more than once
             if (processedPackets.Contains(packet.pid)) return;
 
             if (subscribers.ContainsKey(packet.GetType()))
@@ -52,12 +54,17 @@ namespace minichain
                 }
             }
 
+            // Mark as processed
             processedPackets.Add(packet.pid);
 
             if (packet is BroadcastPacket bpacket)
                 BroadcastPacket(bpacket);
         }
 
+        /// <summary>
+        /// Send `BraodcastPacket` to all peers.
+        /// This method includes `ttl` handling.
+        /// </summary>
         private void BroadcastPacket(BroadcastPacket packet)
         {
             if (packet.ttl == 0) return;

@@ -9,8 +9,6 @@ namespace minichain
 {
     public class Miner : EndpointNode
     {
-        private List<Thread> workers = new List<Thread>();
-
         private string solution;
         private AutoResetEvent ev = new AutoResetEvent(false);
 
@@ -19,7 +17,7 @@ namespace minichain
 
         public void Start()
         {
-            onNewBlockDiscovered += OnNewBlockDiscovered;
+            onNewBlockDiscoveredByOther += OnNewBlockDiscovered;
 
             isAlive = true;
 
@@ -34,7 +32,7 @@ namespace minichain
             miningThread.Join();
         }
 
-        private Transaction[] PrepareBlockTransactions(int blockNo)
+        protected virtual Transaction[] PrepareBlockTransactions(int blockNo)
         {
             // -1 for reward transaction
             var txsWithHighestFee = 
@@ -109,7 +107,7 @@ namespace minichain
         {
             var limit = 10000;
 
-            while(vblock.blockNo == chain.currentBlock.blockNo + 1)
+            while(isAlive && vblock.blockNo == chain.currentBlock.blockNo + 1)
             {
                 var nonce = Solver.FindSolution(vblock, start, limit);
                 // DoubleCheck

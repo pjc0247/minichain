@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
+    // https://github.com/pjc0247/minichain_state_db
     public class StateDB
     {
         class DataHeader
@@ -40,7 +41,6 @@ namespace minichain
         }
         private string WriteHeader(string stateRoot, DataHeader header)
         {
-            //var uid = UniqID.Generate();
             fdb.Write($"root/{stateRoot}", header);
             return stateRoot;
         }
@@ -94,7 +94,7 @@ namespace minichain
             var changes = new Dictionary<string, List<WalletState>>();
             foreach (var wallet in changedWallets)
             {
-                var index = wallet.address.Substring(0, 2);
+                var index = GetIndexFromAddress(wallet.address);
 
                 if (changes.ContainsKey(index) == false)
                     changes[index] = new List<WalletState>();

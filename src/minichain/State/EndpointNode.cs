@@ -11,13 +11,14 @@ namespace minichain
     {
         protected delegate void NewBlockDiscoveredDelegate(Block block);
 
-        protected NewBlockDiscoveredDelegate onNewBlockDiscovered;
+        protected NewBlockDiscoveredDelegate onNewBlockDiscoveredByOther;
 
         public Wallet wallet { get; private set; }
         public ChainState chain { get; private set; }
 
-        private RpcServer rpcServer;
+        protected TransactionPool txPool { get; private set; }
 
+        private RpcServer rpcServer;
         private Thread discoverThread;
 
         public EndpointNode()
@@ -26,6 +27,7 @@ namespace minichain
 
             chain = new ChainState();
             wallet = new Wallet(chain);
+            txPool = new TransactionPool();
 
             Subscribe<PktBroadcastNewBlock>(OnNewBlock);
             Subscribe<PktNewTransaction>(OnNewTransaction);
@@ -83,6 +85,24 @@ namespace minichain
             foreach (var addr in pkt.addrs)
                 peers.AddPeer(addr);
         }
+
+        private void OnRequestNextBlock(Peer sender, PktRequestNextBlock pkt)
+        {
+            var block = chain.GetBlock(pkt.prevBlockHash);
+            if (block == null) return;
+
+            SendPacket(sender, new PktResponseBlock()
+            {
+                block = block
+            });
+        }
+        private void OnResponseBlock(Peer sender, PktResponseBlock pkt)
+        {
+            if (Block.IsValidBlockLight(pkt.block, pkt.block.nonce) == false)
+                return;
+
+        }
+
         protected void DiscoverBlock(Block block)
         {
             SendPacketToAllPeers(new PktBroadcastNewBlock()
@@ -98,7 +118,9 @@ namespace minichain
             if (chain.currentBlock.blockNo >= pkt.block.blockNo) return;
 
             chain.PushBlock(pkt.block);
-            onNewBlockDiscovered?.Invoke(pkt.block);
+            onNewBlockDiscoveredByOther?.Invoke(pkt.block);
+
+            txPool.RemoveTransactions(pkt.block.txs);
         }
         protected virtual void OnNewTransaction(Peer sender, PktNewTransaction pkt)
         {

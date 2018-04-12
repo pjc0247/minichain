@@ -13,8 +13,6 @@ namespace minichain
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
-                //publicKey = Convert.ToBase64String(rsa.ExportParameters(true).Modulus);
-                //privateKey = Convert.ToBase64String(rsa.ExportParameters(true).Exponent);
                 publicKey = rsa.ToXmlString(false);
                 privateKey = rsa.ToXmlString(true);
             }

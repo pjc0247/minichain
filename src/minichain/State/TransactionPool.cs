@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
+    /// <summary>
+    /// Management pending transactions
+    /// </summary>
     public class TransactionPool
     {
-        private SortedList<double, Transaction> pendingTxs = new SortedList<double, Transaction>();
+        private CappedList<Transaction> pendingTxs = new CappedList<Transaction>(1024);
 
         public TransactionPool()
         {
@@ -19,7 +22,7 @@ namespace minichain
         {
             lock (pendingTxs)
             {
-                pendingTxs.Add(tx.fee, tx);
+                pendingTxs.Add(tx);
             }
         }
         public void AddTransactions(Transaction[] txs)
@@ -27,7 +30,15 @@ namespace minichain
             lock (pendingTxs)
             {
                 foreach (var tx in txs)
-                    pendingTxs.Add(tx.fee, tx);
+                    pendingTxs.Add(tx);
+            }
+        }
+        public void RemoveTransactions(Transaction[] txs)
+        {
+            lock (pendingTxs)
+            {
+                foreach (var tx in txs)
+                    pendingTxs.Remove(tx);
             }
         }
         public Transaction[] GetTransactionsWithHighestFee(int n)
@@ -35,7 +46,8 @@ namespace minichain
             lock (pendingTxs)
             {
                 var txs = pendingTxs
-                    .Take(n).Select(x => x.Value).ToArray();
+                    .OrderByDescending(x => x.fee)
+                    .Take(n).Select(x => x).ToArray();
 
                 for (int i = 0; i < txs.Length; i++)
                     pendingTxs.RemoveAt(0);

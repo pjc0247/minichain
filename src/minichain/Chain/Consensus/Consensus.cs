@@ -8,6 +8,8 @@ namespace minichain
 {
     public class Consensus
     {
+        public static int TrustedConfirmations = 30;
+
         public static int MaxTransactionsPerBlock = 16;
         public static string RewardSenderAddress = "0000000000000000";
 

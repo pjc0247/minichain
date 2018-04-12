@@ -40,6 +40,9 @@ namespace minichain
             return Hash.Calc(prevBlockHash + merkleRootHash + nonce);
         }
 
+        /// <summary>
+        /// Check the block has valid nonce.
+        /// </summary>
         public static bool IsValidNonce(Block block, string nonce)
         {
             var hash = GetBlockHash(block.prevBlockHash, block.merkleRootHash, nonce);

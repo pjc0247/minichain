@@ -35,6 +35,9 @@ namespace minichain
             externalAddress = ExternalAddress.GetMyExternalIp();
 
             Console.WriteLine("RUNNING on port " + listeningPort);
+
+            foreach (var addr in HardCodedSeeds.Addrs)
+                AddPeer(addr);
         }
 
         public void AddPeer(string addr)

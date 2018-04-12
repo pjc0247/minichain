@@ -9,6 +9,8 @@ namespace minichain
     public class TransactionHeader
     {
         public string hash;
+        public int version;
+
         public string publicKey;
         /// RSA encrypted sign to validate this transaction.
         public string sign;
@@ -52,6 +54,11 @@ namespace minichain
             return accHash == blockHeader.merkleRootHash;
         }
 
+        /// <summary>
+        /// Create reward transaction.
+        /// This always be located at txs[0] to mined block.
+        /// </summary>
+        /// <param name="txs">Other transactions which included in this block.</param>
         public static Transaction CreateRewardTransaction(int blockNo, string minerAddr, Transaction[] txs)
         {
             var totalFee = txs.Sum(x => x.fee);
@@ -72,8 +79,17 @@ namespace minichain
 
         public string GetTransactionSigniture()
         {
-            return Hash.Calc(senderAddr + receiverAddr + _in + _out + fee);
+            return Hash.Calc(senderAddr + receiverAddr + _in + _out + fee + version);
         }
+
+        /// <summary>
+        /// Sign this transaction, 
+        /// 
+        /// This makes attacker cannot create fake/manipulated transaction.
+        /// 
+        ///    * ONLY wallet owner can make valid transaction with PRIVATE KEY.
+        ///    * EVERYONE can validation the transaction with PUBLIC KEY.
+        /// </summary>
         public void Sign(string _privateKey, string _publicKey)
         {
             var original = GetTransactionSigniture();
