@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
-    // https://github.com/pjc0247/minichain_state_db
+
+    /// Inefficient, but human-readable state tree database
+    /// 
+    /// Why we should use state-tree based DB
+    ///    * Saves only the changes on the disk.
+    ///    * Can easily revert state to specific point.
+    ///    * Can read state from specific point.
+    /// 
+    /// There are 3 components in StateDB
+    ///    * Header
+    ///    * Indexed path
+    ///    * State
+    ///  
+    /// see more details:
+    /// https://github.com/pjc0247/minichain_state_db
     public class StateDB
     {
         class DataHeader
@@ -65,6 +79,7 @@ namespace minichain
             var header = ReadHeader(stateRoot);
             var index = GetIndexFromAddress(address);
 
+            // An address that has never appeared in the chain.
             if (header.path.ContainsKey(index) == false)
                 goto EmptyAccount;
             var wallets = ReadStateBlob(index, header.path[index]);
@@ -83,6 +98,10 @@ namespace minichain
                 balance = 0
             };
         }
+
+        /// <summary>
+        /// Pushes the changes into database.
+        /// </summary>
         public string PushState(string prevStateRoot, string stateRoot, WalletState[] changedWallets)
         {
             DataHeader header = null;

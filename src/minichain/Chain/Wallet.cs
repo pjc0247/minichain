@@ -36,7 +36,7 @@ namespace minichain
         }
 
         /// <summary>
-        /// Import wallet from json string
+        /// Imports wallet from json string
         /// </summary>
         public void Import(string json)
         {
@@ -47,7 +47,7 @@ namespace minichain
             publicKey = p.publicKey;
         }
         /// <summary>
-        /// Export current wallet to json string
+        /// Exports current wallet to json string
         /// </summary>
         public string Export()
         {
@@ -71,7 +71,7 @@ namespace minichain
         }
 
         /// <summary>
-        /// Create a transaction signed by this wallet
+        /// Creates a transaction signed by this wallet
         /// </summary>
         public Transaction CreateSignedTransaction(string receiverAddr, double amount, double fee = 0)
         {
@@ -89,7 +89,7 @@ namespace minichain
             return tx;
         }
         /// <summary>
-        /// Sign a single transaction
+        /// Signs a single transaction
         /// </summary>
         public void Sign(Transaction tx)
         {

@@ -41,7 +41,7 @@ namespace minichain
         }
 
         /// <summary>
-        /// Check the block has valid nonce.
+        /// Checks the block has valid nonce.
         /// </summary>
         public static bool IsValidNonce(Block block, string nonce)
         {
@@ -74,7 +74,7 @@ namespace minichain
             return IsValidNonce(block, nonce);
         }
         /// <summary>
-        /// Fully validate the given block.
+        /// Fully validates the given block.
         /// </summary>
         public static bool IsValidBlockDeep(Block block, string nonce)
         {

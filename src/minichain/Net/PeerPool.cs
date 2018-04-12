@@ -89,7 +89,6 @@ namespace minichain
         public void ProcessPacket(Peer sender, PacketBase pkt)
         {
             nodeBase.ProcessPacket(sender, pkt);
-            //pkt.pid
         }
     }
 }

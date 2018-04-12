@@ -43,6 +43,9 @@ namespace minichain
 
         internal void PushBlock(Block block)
         {
+            if (currentBlock == null)
+                currentBlock = block;
+
             try
             {
                 // In case that new block is came from another branch:
@@ -59,6 +62,7 @@ namespace minichain
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
             }
         }
         private Block TrackBranchedBlock(Block a, Block b)

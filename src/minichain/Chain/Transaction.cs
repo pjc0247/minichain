@@ -62,7 +62,7 @@ namespace minichain
         }
 
         /// <summary>
-        /// Create reward transaction.
+        /// Creates reward transaction.
         /// This always be located at txs[0] to mined block.
         /// </summary>
         /// <param name="txs">Other transactions which included in this block.</param>
@@ -90,7 +90,7 @@ namespace minichain
         }
 
         /// <summary>
-        /// Sign this transaction, 
+        /// Signs this transaction, 
         /// Only signed transaction can be accepted in chain.
         /// 
         /// This makes attacker cannot create fake/manipulated transaction.
