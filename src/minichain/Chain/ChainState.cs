@@ -53,13 +53,13 @@ namespace minichain
                 fdb.Write($"block/{block.hash}", block);
 
                 ApplyTransactions(block);
+
+                // CONFIRMED
+                currentBlock = block;
             }
             catch (Exception e)
             {
             }
-
-            // CONFIRMED
-            currentBlock = block;
         }
         private Block TrackBranchedBlock(Block a, Block b)
         {
