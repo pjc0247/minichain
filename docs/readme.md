@@ -8,14 +8,16 @@ Subjects
 
 Setup
 ----
-__Node__
+__Node__<br>
+A basic node which cannot create a block. 
 ```cs
 var node = new EndpointNode();
 
 // There's no `Start` method in `EndpointNode`.
 ```
 
-__Miner__
+__Miner__<br>
+You can operate mining node if you want to create a block and get mining rewards. This type of node will consume lots of CPU resources.
 ```cs
 var node = new Miner();
 
