@@ -6,8 +6,16 @@ Subjects
   * [Customize minichain](customize_chain.md)
   * [Create a hardfork patch](hardfork_update.md)
 
-Setup minable node
+Setup
 ----
+__Node__
+```cs
+var node = new EndpointNode();
+
+// There's no `Start` method in `EndpointNode`.
+```
+
+__Miner__
 ```cs
 var node = new Miner();
 
