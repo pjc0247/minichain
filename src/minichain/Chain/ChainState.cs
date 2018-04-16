@@ -78,7 +78,6 @@ namespace minichain
         ///                10
         ///                 9
         ///                 8
-        ///             
         /// </summary>
         private Block TrackBranchedBlock(Block a, Block b)
         {
