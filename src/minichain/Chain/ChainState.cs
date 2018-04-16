@@ -65,6 +65,21 @@ namespace minichain
                 Console.WriteLine(e);
             }
         }
+
+        /// <summary>
+        /// Backtracks the branched block.
+        ///             
+        /// ex) TrackBranchedBlock("block13", "block12") 
+        ///       => "block10"
+        ///       
+        ///             13
+        ///             12    12
+        ///              11  11
+        ///                10
+        ///                 9
+        ///                 8
+        ///             
+        /// </summary>
         private Block TrackBranchedBlock(Block a, Block b)
         {
             var history = new HashSet<string>();
