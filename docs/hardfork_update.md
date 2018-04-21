@@ -3,7 +3,9 @@ Hardfork update
 
 In this section, describes how to write hard-fork update codes in already operating blockchain.<br>
 You need to read [this article](https://github.com/pjc0247/minichain/blob/master/docs/customize_chain.md) first.
-
+<br><br>
+Most important this is your code MUST be compatible with both version before and after update since old blocks also can be validated later.
+See the examples below:
 
 Change block reward after Nth block
 ----
