@@ -51,6 +51,7 @@
     <Compile Include="Block_test.cs" />
     <Compile Include="RSA_test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TxPool_test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

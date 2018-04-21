@@ -12,7 +12,9 @@ namespace minichain
     /// </summary>
     public class TransactionPool
     {
-        private CappedList<Transaction> pendingTxs = new CappedList<Transaction>(1024);
+        public int count => pendingTxs.Count;
+
+        private Dictionary<string, Transaction> pendingTxs = new Dictionary<string, Transaction>();
 
         public TransactionPool()
         {
@@ -22,7 +24,12 @@ namespace minichain
         {
             lock (pendingTxs)
             {
-                pendingTxs.Add(tx);
+                // Already has same tx in pool.
+                if (pendingTxs.ContainsKey(tx.hash) &&
+                    pendingTxs[tx.hash].version >= tx.version)
+                    return;
+
+                pendingTxs.Add(tx.hash, tx);
             }
         }
         public void AddTransactions(Transaction[] txs)
@@ -30,7 +37,7 @@ namespace minichain
             lock (pendingTxs)
             {
                 foreach (var tx in txs)
-                    pendingTxs.Add(tx);
+                    AddTransaction(tx);
             }
         }
         public void RemoveTransactions(Transaction[] txs)
@@ -38,7 +45,7 @@ namespace minichain
             lock (pendingTxs)
             {
                 foreach (var tx in txs)
-                    pendingTxs.Remove(tx);
+                    pendingTxs.Remove(tx.hash);
             }
         }
         public Transaction[] GetTransactionsWithHighestFee(int n)
@@ -46,11 +53,12 @@ namespace minichain
             lock (pendingTxs)
             {
                 var txs = pendingTxs
+                    .Select(x => x.Value)
                     .OrderByDescending(x => x.fee)
-                    .Take(n).Select(x => x).ToArray();
+                    .Take(n).ToArray();
 
                 for (int i = 0; i < txs.Length; i++)
-                    pendingTxs.RemoveAt(0);
+                    pendingTxs.Remove(txs[i].hash);
 
                 return txs;
             }
