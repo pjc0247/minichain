@@ -8,9 +8,8 @@ namespace minichain
 {
     public class ChainState
     {
-        // Every node starts with genesisBlock.
-        //   This will be overwritten if there is any other live nodes.
         public Block currentBlock { get; private set; }
+        private object blockLock = new object();
 
         private FileDB fdb;
         private StateDB sdb;
@@ -20,6 +19,8 @@ namespace minichain
             fdb = new FileDB();
             sdb = new StateDB(fdb);
 
+            // Every node starts with genesisBlock.
+            //   This will be overwritten if there is any other live nodes.
             PushBlock(Block.GenesisBlock());
         }
 
@@ -39,31 +40,40 @@ namespace minichain
         public double GetBalance(string address)
         {
             return GetBalanceInBlock(address, currentBlock.hash);
-        }
+        }   
 
-        internal void PushBlock(Block block)
+        internal bool PushBlock(Block block)
         {
+            if (block == null) 
+                throw new ArgumentNullException(nameof(block));
             if (currentBlock == null)
                 currentBlock = block;
 
             try
             {
-                // In case that new block is came from another branch:
-                if (currentBlock != null &&
-                    block.prevBlockHash != currentBlock.hash)
-                    ;
+                lock (blockLock)
+                {
+                    // In case that new block is came from another branch:
+                    if (currentBlock != null &&
+                        block.prevBlockHash != currentBlock.hash)
+                        ;
 
-                fdb.Write($"block/{block.hash}", block);
+                    fdb.Write($"block/{block.hash}", block);
 
-                ApplyTransactions(block);
+                    ApplyTransactions(block);
 
-                // CONFIRMED
-                currentBlock = block;
+                    // CONFIRMED
+                    currentBlock = block;
+
+                    return true;
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
+
+            return false;
         }
 
         /// <summary>
@@ -130,3 +140,4 @@ namespace minichain
         }
     }
 }
+    

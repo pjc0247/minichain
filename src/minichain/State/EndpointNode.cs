@@ -88,7 +88,7 @@ namespace minichain
 
         private void OnRequestNextBlock(Peer sender, PktRequestNextBlock pkt)
         {
-            var block = chain.GetBlock(pkt.prevBlockHash);
+            var block = chain.GetBlock(pkt.blockHash);
             if (block == null) return;
 
             SendPacket(sender, new PktResponseBlock()
@@ -98,12 +98,21 @@ namespace minichain
         }
         private void OnResponseBlock(Peer sender, PktResponseBlock pkt)
         {
-            if (Block.IsValidBlockLight(pkt.block, pkt.block.nonce) == false)
+            if (Block.IsValidBlockLight(pkt.block, pkt.block.nonce) == false)  
                 return;
 
+            if (pkt.block == null) return;
+                
+            if (chain.PushBlock(pkt.block))
+            {
+                SendPacket(sender, new PktRequestNextBlock()
+                {
+                    blockHash = pkt.block.hash
+                });
+            }
         }
 
-        protected void DiscoverBlock(Block block)
+        protected void PublishBlock(Block block)
         {
             SendPacketToAllPeers(new PktBroadcastNewBlock()
             {

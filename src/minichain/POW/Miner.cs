@@ -72,7 +72,7 @@ namespace minichain
 
                     chain.PushBlock(new Block(wallet.address, chain.currentBlock, txs, solution));
 
-                    DiscoverBlock(chain.currentBlock);
+                    PublishBlock(chain.currentBlock);
                     Console.WriteLine(
                         $"   * FindBlock#{chain.currentBlock.blockNo}, elapsed {elapsed} sec(s)\r\n" +
                         $"        nonce: {solution} \r\n" +

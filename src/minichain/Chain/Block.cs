@@ -97,7 +97,7 @@ namespace minichain
         public Block()
         {
         }
-        public Block(string _minerAddr, Block prev, Transaction[] _txs, string _nonce)
+        public Block(string _minerAddr, Block _prev, Transaction[] _txs, string _nonce)
         {
             var merkleTree = new MerkleTree(_txs);
 
@@ -107,12 +107,12 @@ namespace minichain
             txs = _txs;
 
             // GENESIS-BLOCK
-            if (prev == null)
+            if (_prev == null)
                 prevBlockHash = "";
             else
             {
-                prevBlockHash = prev.hash;
-                blockNo = prev.blockNo + 1;
+                prevBlockHash = _prev.hash;
+                blockNo = _prev.blockNo + 1;
             }
 
             difficulty = Consensus.CalcBlockDifficulty(blockNo);

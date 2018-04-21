@@ -37,6 +37,7 @@ namespace minichain
                 if (type == "unlock") OnUnlock(JsonConvert.DeserializeObject<RpcUnlock>(e.Data));
                 else if (isUnlocked == false) AbortSession();
                 else if (type == "query_balance") OnQueryBalance(JsonConvert.DeserializeObject<RpcQueryBalance>(e.Data));
+                else if (type == "query_wallet") OnQueryWallet(JsonConvert.DeserializeObject<RpcQueryWallet>(e.Data));
             }
             catch (Exception exception)
             {
@@ -73,6 +74,20 @@ namespace minichain
             {
                 pid = pkt.pid,
                 result = balance
+            });
+        }
+        private void OnQueryWallet(RpcQueryWallet pkt)
+        {
+            var wallet = server.node.wallet;
+
+            SendPacket(new RpcResponse()
+            {
+                pid = pkt.pid,
+                result = new WalletState()
+                {
+                    address = wallet.address,
+                    balance = wallet.balance
+                }
             });
         }
     }

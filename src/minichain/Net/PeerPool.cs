@@ -13,10 +13,16 @@ namespace minichain
 {
     public class PeerPool
     {
+        public delegate void PeerConnectedDelegate(Peer peer);
+        public delegate void PeerLostDelegate(Peer peer);
+
         public static int MaxPeers = 4;
 
         public int alivePeers => peers.Count;
         public int listeningPort { get; }
+
+        public PeerConnectedDelegate onPeerConnected;
+        public PeerLostDelegate onPeerLost;
 
         private string externalAddress;
 
@@ -57,14 +63,20 @@ namespace minichain
             var ws = new WebSocket(addr);
             var peer = new Peer(this, ws);
             ws.Connect();
+
+            onPeerConnected?.Invoke(peer);
         }
         public void AddPeer(Peer peer)
         {
             peers.TryAdd(peer, 0);
+
+            onPeerConnected?.Invoke(peer);
         }
         public void RemovePeer(Peer peer)
         {
             peers.TryRemove(peer, out _);
+
+            onPeerLost?.Invoke(peer);
         }
 
         public void SendPacketToAllPeers(PacketBase packet)

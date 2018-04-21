@@ -71,7 +71,7 @@ namespace minichain
 
     public class PktRequestNextBlock : PacketBase
     {
-        public string prevBlockHash;
+        public string blockHash;
     }
     public class PktResponseBlock : PacketBase
     {

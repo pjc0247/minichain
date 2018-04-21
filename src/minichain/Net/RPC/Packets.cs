@@ -22,6 +22,10 @@ namespace minichain
     public class RpcQueryBalance : RpcPacketBase
     {
     }
+    public class RpcQueryWallet : RpcPacketBase
+    {
+    }
+
     public class RpcResponse : RpcPacketBase
     {
         public object result;
