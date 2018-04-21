@@ -62,7 +62,7 @@ namespace minichain
         }
 
         /// <summary>
-        /// Creates reward transaction.
+        /// Creates a reward transaction.
         /// This always be located at txs[0] to mined block.
         /// </summary>
         /// <param name="txs">Other transactions which included in this block.</param>
