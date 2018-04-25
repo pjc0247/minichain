@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
-
     /// Inefficient, but human-readable state tree database
     /// 
     /// Why we should use state-tree based DB
@@ -59,11 +58,11 @@ namespace minichain
             return stateRoot;
         }
 
-        private WalletState[] ReadStateBlob(string index, string uid)
+        private SingleState[] ReadStateBlob(string index, string uid)
         {
-            return fdb.Read<WalletState[]>($"addr/{index}/{uid}");
+            return fdb.Read<SingleState[]>($"addr/{index}/{uid}");
         }
-        private string WriteStateBlob(string index, WalletState[] wallets)
+        private string WriteStateBlob(string index, SingleState[] wallets)
         {
             var uid = UniqID.Generate();
             fdb.Write($"addr/{index}/{uid}", wallets);
@@ -74,7 +73,7 @@ namespace minichain
         {
             return address.Substring(0, 2);
         }
-        public WalletState GetState(string stateRoot, string address)
+        public SingleState GetState(string stateRoot, string address)
         {
             var header = ReadHeader(stateRoot);
             var index = GetIndexFromAddress(address);
@@ -86,23 +85,23 @@ namespace minichain
 
             foreach (var wallet in wallets)
             {
-                if (wallet.address == address)
+                if (wallet.key == address)
                     return wallet;
             }
 
             // Empty account
             EmptyAccount:
-            return new WalletState()
+            return new SingleState()
             {
-                address = address,
-                balance = 0
+                key = address,
+                value = 0
             };
         }
 
         /// <summary>
         /// Pushes the changes into database.
         /// </summary>
-        public string PushState(string prevStateRoot, string stateRoot, WalletState[] changedWallets)
+        public string PushState(string prevStateRoot, string stateRoot, SingleState[] changedWallets)
         {
             DataHeader header = null;
 
@@ -110,13 +109,13 @@ namespace minichain
                 header = DataHeader.EmptyState();
             else header = ReadHeader(prevStateRoot);
 
-            var changes = new Dictionary<string, List<WalletState>>();
+            var changes = new Dictionary<string, List<SingleState>>();
             foreach (var wallet in changedWallets)
             {
-                var index = GetIndexFromAddress(wallet.address);
+                var index = GetIndexFromAddress(wallet.key);
 
                 if (changes.ContainsKey(index) == false)
-                    changes[index] = new List<WalletState>();
+                    changes[index] = new List<SingleState>();
 
                 changes[index].Add(wallet);
             }

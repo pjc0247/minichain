@@ -58,6 +58,8 @@
     <Compile Include="Chain\ChainState.cs" />
     <Compile Include="DataStructure\CappedList.cs" />
     <Compile Include="DB\FileDB.cs" />
+    <Compile Include="DB\Model\HashObject.cs" />
+    <Compile Include="DB\Model\SingleState.cs" />
     <Compile Include="DB\StateDB.cs" />
     <Compile Include="Net\HardCodedSeeds.cs" />
     <Compile Include="Net\Packet\NonPublicPropertiesResolver.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Copyright.cs" />
+    <Compile Include="Util\Cvt.cs" />
     <Compile Include="Util\UniqID.cs" />
   </ItemGroup>
   <ItemGroup>

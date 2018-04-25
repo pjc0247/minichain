@@ -18,14 +18,14 @@ namespace minichain
 
         private MerkleNode[] tree;
 
-        public MerkleTree(Transaction[] txs)
+        public MerkleTree(HashObject[] txs)
         {
             if (txs.Length < 4)
             {
-                txs = (new List<Transaction>(txs)).Concat(
-                    new Transaction[] {
-                    Transaction.EmptyTransaction(), Transaction.EmptyTransaction(), Transaction.EmptyTransaction(),
-                    Transaction.EmptyTransaction() }
+                txs = (new List<HashObject>(txs)).Concat(
+                    new HashObject[] {
+                    HashObject.Empty(), HashObject.Empty(), HashObject.Empty(),
+                    HashObject.Empty() }
                     ).ToArray();
             }
 

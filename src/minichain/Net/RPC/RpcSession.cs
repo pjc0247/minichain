@@ -85,8 +85,8 @@ namespace minichain
                 pid = pkt.pid,
                 result = new WalletState()
                 {
-                    address = wallet.address,
-                    balance = wallet.balance
+                    key = wallet.address,
+                    value = wallet.value
                 }
             });
         }

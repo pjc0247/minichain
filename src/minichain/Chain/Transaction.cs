@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
-    public class TransactionHeader
+    public class TransactionHeader : HashObject
     {
-        /// Random generated hash
-        public string hash;
         /// To give a chance user can modify the transaction
         ///    already distributed but not in chain.
         public int version;

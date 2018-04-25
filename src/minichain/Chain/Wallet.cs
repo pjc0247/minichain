@@ -8,10 +8,9 @@ using Newtonsoft.Json;
 
 namespace minichain
 {
-    public class WalletState
+    public class WalletState : SingleState
     {
-        public string address { get; set; }
-        public double balance { get; set; }
+        public string address => key;
     }
     public class WalletParameter
     {
@@ -32,7 +31,7 @@ namespace minichain
             RSA.GenerateKeyPair(out publicKey, out privateKey);
 
             chain = _chain;
-            address = Hash.Calc(publicKey);
+            key = Hash.Calc(publicKey);
         }
 
         /// <summary>
@@ -42,10 +41,22 @@ namespace minichain
         {
             var p = JsonConvert.DeserializeObject<WalletParameter>(json);
 
-            address = p.address;
-            privateKey = p.privateKey;
-            publicKey = p.publicKey;
+            if (IsValidateKeyPair(p.privateKey, p.publicKey))
+            {
+                key = p.address;
+                privateKey = p.privateKey;
+                publicKey = p.publicKey;
+            }
+            else
+                throw new ArgumentException("Invalid key pair");
         }
+
+        private bool IsValidateKeyPair(string privateKey, string publicKey)
+        {
+            var sign = RSA.SignWithPrivateKey(privateKey, "teststring");
+            return RSA.VerifyWithPrivateKey(publicKey, "teststring", sign);
+        }
+
         /// <summary>
         /// Exports current wallet to json string
         /// </summary>

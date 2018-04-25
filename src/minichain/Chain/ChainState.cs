@@ -35,7 +35,7 @@ namespace minichain
 
         public double GetBalanceInBlock(string address, string blockHash)
         {
-            return sdb.GetState(blockHash, address).balance;
+            return sdb.GetState(blockHash, address).value;
         }
         public double GetBalance(string address)
         {
@@ -110,29 +110,29 @@ namespace minichain
         private void ApplyTransactions(Block newBlock)
         {
             var txs = newBlock.txs;
-            var changes = new HashSet<WalletState>();
+            var changes = new HashSet<SingleState>();
 
             foreach (var tx in txs)
             {
                 if (tx.senderAddr != Consensus.RewardSenderAddress)
                 {
-                    var senderWallet = changes.FirstOrDefault(x => x.address == tx.senderAddr);
+                    var senderWallet = changes.FirstOrDefault(x => x.key == tx.senderAddr);
                     if (senderWallet == null)
                         senderWallet = sdb.GetState(currentBlock.hash, tx.senderAddr);
 
-                    if (senderWallet.balance != tx._in)
+                    if (senderWallet.value != tx._in)
                         throw new InvalidOperationException();
 
                     // Actual OUT is (_out + fee)
-                    senderWallet.balance -= tx._out + tx.fee;
+                    senderWallet.value -= tx._out + tx.fee;
                     changes.Add(senderWallet);
                 }
 
-                var receiverWallet = changes.FirstOrDefault(x => x.address == tx.receiverAddr);
+                var receiverWallet = changes.FirstOrDefault(x => x.key == tx.receiverAddr);
                 if (receiverWallet == null)
                     receiverWallet = sdb.GetState(currentBlock.hash, tx.receiverAddr);
 
-                receiverWallet.balance += tx._out;
+                receiverWallet.value += tx._out;
                 changes.Add(receiverWallet);
             }
 
