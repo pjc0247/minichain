@@ -32,26 +32,6 @@ Sub repositories
 * [Demonstrate 51% attack on blockchain network](https://github.com/pjc0247/minichain_51attack_demo)
 * [State DB implementation](https://github.com/pjc0247/minichain_state_db)
 
-ThingsToDo
-----
-* __p2p__
-  * [x] Exchange peers
-  * [ ] Local Discovery
-* __chain__
-  * __consensus__
-    * [x] Block confirmation
-  * __mining__
-    * [x] Block rewards
-    * [x] Dynamic difficulty
-  * __wallet__
-    * [x] implements overall wallet system.
-    * [x] Transaction signing
-  * __txpool__
-    * [ ] implements overall txpool system.
-* __PoW__
-  * [x] Include transactions with highest fees
-  * [ ] More elaborated multithread mining
-
 
 Specification
 ----
