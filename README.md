@@ -35,6 +35,9 @@ Sub repositories
 
 Specification
 ----
+* __Consensus__
+  * Proof of Work
+  
 * __Block Structure__
 
 * __Block Validation__
