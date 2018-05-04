@@ -6,8 +6,28 @@ using System.Threading.Tasks;
 
 namespace minichain
 {
+    public enum TransactionType
+    {
+        /// <summary>
+        /// Send funds with _in & _out patameters.
+        /// </summary>
+        Payment,
+
+        /// <summary>
+        /// Create a new contract
+        /// </summary>
+        Deploy,
+
+        /// <summary>
+        /// Execute a single method from contract
+        /// </summary>
+        Call
+    }
+
     public class TransactionHeader : HashObject
     {
+        public TransactionType type;
+
         /// To give a chance user can modify the transaction
         ///    already distributed but not in chain.
         public int version;
@@ -82,6 +102,7 @@ namespace minichain
         public Transaction()
         {
             hash = UniqID.Generate();
+            type = TransactionType.Payment;
         }
 
         public string GetTransactionSigniture()
