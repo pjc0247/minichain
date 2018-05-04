@@ -60,12 +60,12 @@ namespace minichain
 
         private SingleState[] ReadStateBlob(string index, string uid)
         {
-            return fdb.Read<SingleState[]>($"addr/{index}/{uid}");
+            return fdb.Read<SingleState[]>($"state/{index}/{uid}");
         }
         private string WriteStateBlob(string index, SingleState[] wallets)
         {
             var uid = UniqID.Generate();
-            fdb.Write($"addr/{index}/{uid}", wallets);
+            fdb.Write($"chain/{index}/{uid}", wallets);
             return uid;
         }
 
