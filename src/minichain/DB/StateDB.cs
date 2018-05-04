@@ -60,7 +60,7 @@ namespace minichain
 
         private SingleState[] ReadStateBlob(string index, string uid)
         {
-            return fdb.Read<SingleState[]>($"state/{index}/{uid}");
+            return fdb.Read<SingleState[]>($"chain/{index}/{uid}");
         }
         private string WriteStateBlob(string index, SingleState[] wallets)
         {
@@ -69,14 +69,14 @@ namespace minichain
             return uid;
         }
 
-        private string GetIndexFromAddress(string address)
+        private string GetIndexFromHash(string address)
         {
             return address.Substring(0, 2);
         }
         public SingleState GetState(string stateRoot, string address)
         {
             var header = ReadHeader(stateRoot);
-            var index = GetIndexFromAddress(address);
+            var index = GetIndexFromHash(address);
 
             // An address that has never appeared in the chain.
             if (header.path.ContainsKey(index) == false)
@@ -112,7 +112,7 @@ namespace minichain
             var changes = new Dictionary<string, List<SingleState>>();
             foreach (var wallet in changedWallets)
             {
-                var index = GetIndexFromAddress(wallet.key);
+                var index = GetIndexFromHash(wallet.key);
 
                 if (changes.ContainsKey(index) == false)
                     changes[index] = new List<SingleState>();
