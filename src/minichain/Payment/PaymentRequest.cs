@@ -8,11 +8,16 @@ namespace minichain
 {
     public class PaymentRequest
     {
-        public string paymentId;
+        public string paymentId { get; private set; }
 
         public double value;
         public string dTag;
 
         public int firstConfirmedAt;
+
+        public PaymentRequest()
+        {
+            paymentId = UniqID.Generate();
+        }
     }
 }

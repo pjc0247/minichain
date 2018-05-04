@@ -30,7 +30,6 @@ namespace minichain
             var req = new PaymentRequest()
             {
                 dTag = UniqID.Generate(),
-                paymentId = UniqID.Generate(),
                 value = value
             };
 
