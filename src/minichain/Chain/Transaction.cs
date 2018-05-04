@@ -21,6 +21,7 @@ namespace minichain
 
         public double fee;
         public double _in, _out;
+        public string dTag;
 
         public bool isSigned =>
             !string.IsNullOrEmpty(publicKey) && !string.IsNullOrEmpty(encryptedSign);
@@ -34,6 +35,7 @@ namespace minichain
         }
         public static bool IsValidTransaction(Transaction tx)
         {
+            if (tx.senderAddr == Consensus.RewardSenderAddress) return false;
             if (tx._out == 0) return false;
             if (tx.isSigned == false) return false;
 

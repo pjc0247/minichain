@@ -8,8 +8,12 @@ namespace minichain
 {
     public class ChainState
     {
+        public delegate void BlockConfirmedDelegate(Block b);
+
         public Block currentBlock { get; private set; }
         private object blockLock = new object();
+
+        public BlockConfirmedDelegate onBlockConfirmed { get; set; }
 
         private FileDB fdb;
         private StateDB sdb;
@@ -64,6 +68,8 @@ namespace minichain
 
                     // CONFIRMED
                     currentBlock = block;
+
+                    onBlockConfirmed?.Invoke(block);
 
                     return true;
                 }
