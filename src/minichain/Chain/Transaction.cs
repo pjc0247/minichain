@@ -47,7 +47,17 @@ namespace minichain
             !string.IsNullOrEmpty(publicKey) && !string.IsNullOrEmpty(encryptedSign);
     }
 
-    public class Transaction : TransactionHeader
+    public class TransactionBody : TransactionHeader
+    {
+        // TransactionType.Deploy
+        public string contractProgram;
+
+        // TransactionType.Call
+        public string methodSignature;
+        public object[] callArgs;
+    }
+
+    public class Transaction : TransactionBody
     {
         internal static Transaction EmptyTransaction()
         {
