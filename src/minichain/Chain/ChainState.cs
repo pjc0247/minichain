@@ -126,9 +126,6 @@ namespace minichain
                     if (senderWallet == null)
                         senderWallet = sdb.GetState(currentBlock.hash, tx.senderAddr);
 
-                    if (senderWallet.value != tx._in)
-                        throw new InvalidOperationException();
-
                     // Actual OUT is (_out + fee)
                     senderWallet.value -= tx._out + tx.fee;
                     changes.Add(senderWallet);
