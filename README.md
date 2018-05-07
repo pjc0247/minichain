@@ -10,6 +10,16 @@
                                                              pjc0247@naver.com
       
 
+```
+This project contains some known bugs and may not be fixed.
+However you can still learn how blockchain system works.
+
+I'm currently working on an another fork of this project. 
+This includes some fixes which is not fixed in `minichain`.
+Please check the repository below:
+https://github.com/pjc0247/mchain
+```
+
 Minimal implementation of __BLOCKCHAIN__, written in __CSharp__.<br>
 __[Documentation](docs/)__<br>
 
